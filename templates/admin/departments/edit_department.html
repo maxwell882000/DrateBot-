@@ -1,0 +1,69 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}{{ company.name }} - {{ department.name }}{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin_companies_list' %}" class="breadcrumb-item">Список компаний</a>
+    <a href="{% url 'admin_company' pk=company.id%}" class="breadcrumb-item">{{ company.name }}</a>
+    <span class="breadcrumb-item active">{{ department.name }}</span>
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/sweetalert2.min.css' %}">
+{% endblock %}
+{% block content %}
+    <form action="{% url 'admin_delete_department' company_id=company.id pk=department.id %}" method="post" id="departmentDeleteForm">
+        {% csrf_token %}
+    </form>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">{{ company.name }} - {{ department.name }}</h3>
+                <div class="block-options">
+                    <button class="btn btn-sm btn-alt-primary" type="submit"><i class="fa fa-check"></i>Сохранить</button>
+                    <button type="button" class="btn-block-option dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дополнительно
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                        <a href="#" class="dropdown-item" id="departmentDeleteButton" data-department-name="{{ department.name }}"><i class="fa fa-trash-o mr-5"></i>Удалить</a>
+                    </div>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="form-material floating form-material-primary">
+                                <input type="text" name="name" id="name" class="form-control" value="{{ department.name }}">
+                                <label for="{{ form.name.id_for_label }}">Название отдела</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Список сотрудников</h3>
+        </div>
+        <div class="block-content">
+            {% if object_list %}
+                <ul class="list-group list-group-flush mb-20">
+                    {% for user in object_list %}
+                        <li class="list-group-item">{{ user.name }} - {{ user.phone_number }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="py-30 text-center">
+                    <i class="si si-ghost text-primary display-3"></i>
+                    <p class="mt-20 font-size-h5">В отделе {{ department.name }} компании {{ company.name }} ещё нет сотрудников</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'assets/js/plugins/es6-promise.auto.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'assets/js/department.js' %}"></script>
+{% endblock %}

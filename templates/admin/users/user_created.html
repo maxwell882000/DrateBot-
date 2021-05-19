@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+    {{ user.name }}
+{% endblock %}
+{% block content %}
+    <h2 class="content-heading">Сотрудник добавлен</h2>
+    <div class="py-30 text-center">
+        <i class="si si-check text-primary display-1"></i>
+        <p class="mt-20 font-size-h5">Сотрудник <strong>{{ user.name }}</strong> добавлен, теперь ему необходимо пройти регистрацию в Telegram боте с помощью этой ссылки:</p>
+        <p class="font-size-h3">
+            <a href="#" class="link-effect">https://t.me/{{ bot_username }}/?start={{ user.token }}</a>
+        </p>
+        <p class="font-size-h5">Скопируйте и отправьте эту ссылку вашему сотруднику <span class="font-size-h4 text-danger text-uppercase">и больше никому!</span></p>
+    </div>
+    <div class="pb-30 d-flex align-content-center justify-content-around">
+        <a href="{% url 'admin_users' %}" class="btn btn-alt-primary">К списку сотрудников</a>
+        <a href="{% url 'admin_new_user' %}" class="btn btn-alt-primary">Добавить ещё одного</a>
+    </div>
+{% endblock %}

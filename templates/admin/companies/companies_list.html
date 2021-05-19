@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Список компаний{% endblock %}
+{% block breadcrumbs %}
+    <span class="breadcrumb-item active">Список компаний</span>
+{% endblock %}
+{% block content %}
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Список компаний</h3>
+        </div>
+        <div class="block-content">
+            {% if companies %}
+                <ul class="list-group list-group-flush mb-20">
+                    {% for company in companies %}
+                        <a href="{% url 'admin_company' pk=company.id %}" class="list-group-item list-group-item-action">
+                            {{ company.name }}
+                        </a>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="py-30 text-center">
+                    <i class="si si-ghost text-primary display-3"></i>
+                    <p class="mt-20 font-size-h5">Ни одна компания ещё не добавлена</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

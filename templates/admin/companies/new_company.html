@@ -1,0 +1,33 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Добавить компанию{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin_companies_list' %}" class="breadcrumb-item">Список компаний</a>
+{% endblock %}
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Новая компания</h3>
+                <div class="block-options">
+                    <button class="btn btn-sm btn-alt-primary" type="submit"><i class="fa fa-check"></i>Сохранить</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group {% if form.name.errors %}is-invalid{% endif %}">
+                            <div class="form-material floating form-material-primary">
+                                <input type="text" name="name" id="name" class="form-control">
+                                <label for="{{ form.name.id_for_label }}">Название</label>
+                            </div>
+                            {% for error in form.name.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

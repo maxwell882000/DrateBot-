@@ -1,0 +1,19 @@
+{
+    "registration.not_allowed": "Извините, но я не могу распознать вас.",
+    "registration.user_exists": "Здравствуйте, <b>{name}</b>, вы уже зарегистрированы! Выберите пункт меню",
+    "registration.welcome_manager": "Здравствуйте, менеджер <b>{name}</b>! Ваша регистрация подтверждена ✅",
+    "registration.welcome_common": "Здравствуйте, <b>{name}</b>! Ваша регистрация подтверждена ✅",
+    "registration.languages": "Выберите язык бота для начала работы",
+    "registration.welcome": "Язык выбран, добро пожаловать в главное меню!",
+    "languages.ru": "Русский \uD83C\uDDF7\uD83C\uDDFA",
+    "languages.en": "English \uD83C\uDDFA\uD83C\uDDF8",
+    "languages.uz": "O`zbek \uD83C\uDDFA\uD83C\uDDFF",
+    "menu.put_estimate": "Поставить оценку ⭐️",
+    "menu.sos": "SOS \uD83C\uDD98",
+    "menu.ratings": "Рейтинги ⭐",
+    "menu.settings": "Настройки ⚙️",
+    "settings.menu": "Меню настроек ⚙",
+    "settings.languages": "Изменить язык \uD83C\uDF10",
+    "settings.select_language": "Выберите язык",
+    "settings.languages_success": "Язык изменён ✅"
+}

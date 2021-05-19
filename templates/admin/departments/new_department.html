@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %}
+{% block title %}{{ company.name }} - Новый отдел{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin_companies_list' %}" class="breadcrumb-item">Список компаний</a>
+    <a href="{% url 'admin_company' pk=company.id%}" class="breadcrumb-item">{{ company.name }}</a>
+    <span class="breadcrumb-item active">Новый отдел</span>
+{% endblock %}
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">{{ company.name }} - Новый отдел</h3>
+                <div class="block-options">
+                    <button class="btn btn-sm btn-alt-primary" type="submit"><i class="fa fa-check"></i>Сохранить</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="form-material floating form-material-primary">
+                                <input type="text" name="name" id="name" class="form-control">
+                                <label for="{{ form.name.id_for_label }}">Название отдела</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

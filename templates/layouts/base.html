@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Meta tags -->
+    <meta name="description" content="Административная панель Telegram бота проекта RevoRate">
+    <meta name="author" content="Verve Intelligence Development">
+    <meta name="robots" content="noindex, nofollow">
+    {% load static %}
+    <!-- Stylesheets -->
+    {% block prestyles %}{% endblock prestyles %}
+    <link rel="stylesheet" href="{% static "assets/css/codebase.min.css" %}">
+    <link rel="stylesheet" href="{% static "assets/css/themes/corporate.min.css" %}">
+    {% block styles %}{% endblock %}
+
+    <!-- Page title -->
+    <title>{% block title %}{% endblock %} | RevoRate</title>
+</head>
+<body>
+    <div id="page-container" class="sidebar-o side-scroll {% if request.resolver_match.url_name == 'admin_home' %}page-header-glass page-header-inverse{% else %}page-header-modern{% endif %} main-content-boxed">
+        <nav id="sidebar">
+            <div id="sidebar-scroll">
+                <div id="sidebar-content">
+                    <div class="content-header content-header-fullrow px-15">
+                        <!-- Mini Mode -->
+                        <div class="content-header-section sidebar-mini-visible-b">
+                            <!-- Logo -->
+                            <span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
+                                <span class="text-dual-primary-dark">R</span><span class="text-primary">Rate</span>
+                            </span>
+                            <!-- END Logo -->
+                        </div>
+                        <!-- END Mini Mode -->
+                        <!-- Normal Mode -->
+                        <div class="content-header-section text-center align-parent sidebar-mini-hidden">
+                            <!-- Close Sidebar, Visible only on mobile screens -->
+                            <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r" data-toggle="layout" data-action="sidebar_close">
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                            <!-- END Close Sidebar -->
+
+                            <!-- Logo -->
+                            <div class="content-header-item">
+                                <a class="link-effect font-w700" href="{% url "admin_home" %}">
+                                    <i class="si si-star text-primary"></i>
+                                    <span class="font-size-xl text-dual-primary-dark">Revo</span><span class="font-size-xl text-primary">Rate</span>
+                                </a>
+                            </div>
+                            <!-- END Logo -->
+                        </div>
+                        <!-- END Normal Mode -->
+                    </div>
+                    <!-- END Side Header -->
+                    <!-- Side User -->
+                    <div class="content-side content-side-full content-side-user px-10 align-parent">
+                        <!-- Visible only in mini mode -->
+                        <div class="sidebar-mini-visible-b align-v animated fadeIn">
+                            <img class="img-avatar img-avatar32" src="{% static "assets/img/avatar.jpg" %}" alt="{{ user.username }}">
+                        </div>
+                        <!-- END Visible only in mini mode -->
+
+                        <!-- Visible only in normal mode -->
+                        <div class="sidebar-mini-hidden-b text-center">
+                            <img class="img-avatar" src="{% static "assets/img/avatar.jpg" %}" alt="{{ user.username }}">
+                            <ul class="list-inline mt-10">
+                                <li class="list-inline-item">
+                                    <span class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase">{{ user.username }}</span>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="link-effect text-dual-primary-dark" href="{% url 'logout' %}">
+                                        <i class="si si-logout"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END Visible only in normal mode -->
+                    </div>
+                    <!-- END Side User -->
+
+                    <!-- Side Navigation -->
+                    <div class="content-side content-side-full">
+                        <ul class="nav-main">
+                            <li><a href="{% url 'admin_companies_list' %}"><i class="fa fa-building"></i>Компании</a></li>
+                            <li><a href="{% url 'admin_users' %}"><i class="fa fa-users"></i>Сотрудники</a></li>
+                            <li><a href="{% url 'admin_ratings' %}"><i class="fa fa-star"></i>Рейтинги</a></li>
+                            <li><a href="{% url 'admin_sos' %}"><i class="fa fa-warning text-danger"></i>Сигналы SOS</a></li>
+                        </ul>
+                    </div>
+                    <!-- END Side Navigation -->
+                </div>
+            </div>
+        </nav>
+        <!-- END Sidebar -->
+
+        <!-- Header -->
+        <header id="page-header">
+            <div class="content-header">
+                <!-- Left Section -->
+                    <div class="content-header-section">
+                        <!-- Toggle Sidebar -->
+                        <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
+                        <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout" data-action="sidebar_toggle">
+                            <i class="fa fa-navicon"></i>
+                        </button>
+                        <!-- END Toggle Sidebar -->
+                    </div>
+                <!-- END Left Section -->
+
+                <!-- Right Section -->
+                <div class="content-header-section">
+                    <!-- User Dropdown -->
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ user.username }}<i class="fa fa-angle-down ml-5"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right min-width-150" aria-labelledby="page-header-user-dropdown">
+                            <a class="dropdown-item" href="{% url 'logout' %}">
+                                <i class="si si-logout mr-5"></i> Выйти
+                            </a>
+                        </div>
+                    </div>
+                    <!-- END User Dropdown -->
+                </div>
+                <!-- END Right Section -->
+            </div>
+            <!-- Header Loader -->
+            <div id="page-header-loader" class="overlay-header bg-primary">
+                <div class="content-header content-header-fullrow text-center">
+                    <div class="content-header-item">
+                        <i class="fa fa-sun-o fa-spin text-white"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END Header Loader -->
+        </header>
+        <!-- Main Container -->
+        <main id="main-container">
+            {% if request.resolver_match.url_name == 'admin_home' %}
+                <!-- Page Content -->
+                <div class="bg-image" style="background-image: url('{% static 'assets/img/photo2@2x.jpg' %}')">
+                    <div class="hero bg-primary-dark-op">
+                        <div class="hero-inner">
+                            <div class="content content-full text-center">
+                                <h1 class="display-4 font-w700 text-white mb-10 invisible" data-toggle="appear" data-class="animated fadeInDown">RevoRate</h1>
+                                <h2 class="font-w400 text-white-op mb-50 invisible" data-toggle="appear" data-class="animated fadeInUp" data-timeout="250">Добро пожаловать, администратор!</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Page Content -->
+            {% else %}
+                <!-- Page Content -->
+                <div class="content">
+                    <nav class="breadcrumb bg-white push">
+                        <a class="breadcrumb-item" href="{% url "admin_home" %}">RevoRate</a>
+                        {% block breadcrumbs %} {% endblock %}
+                    </nav>
+                    {% if messages %}
+                        <!-- Alerts -->
+                        <div class="row">
+                            {% for message in messages %}
+                                <div class="col-md-12">
+                                    <div class="alert alert-dismissible alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}success{% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}info{% endif %}" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <h3 class="alert-heading font-size-h4 font-w400">{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}Успешно!{% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Ошибка!{% else %}Полезно знать!{% endif %}</h3>
+                                        <p class="mb-0">
+                                            {{ message }}
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% block content %}{% endblock content %}
+                </div>
+                <!-- END Page Content -->
+            {% endif %}
+        </main>
+        <!-- END Main Container -->
+        <!-- Footer -->
+    <footer id="page-footer">
+        <div class="content py-20 font-size-xs clearfix">
+            <div class="float-right">
+                Powered by <a href="https://vid.uz" target="_blank" class="font-w600">vid.uz</a>
+            </div>
+            <div class="float-left">
+                <a href="https://t.me/revorate_bot" target="_blank" class="font-w600">RevoRate Bot</a>
+                © {% now "Y" %}
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static "assets/js/core/jquery.min.js" %}"></script>
+    <script src="{% static "assets/js/core/popper.min.js" %}"></script>
+    <script src="{% static "assets/js/core/bootstrap.min.js" %}"></script>
+    <script src="{% static "assets/js/core/jquery.slimscroll.min.js" %}"></script>
+    <script src="{% static "assets/js/core/jquery.scrollLock.min.js" %}"></script>
+    <script src="{% static "assets/js/core/jquery.countTo.min.js" %}"></script>
+    <script src="{% static "assets/js/core/jquery.appear.min.js" %}"></script>
+    <script src="{% static "assets/js/codebase.js" %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

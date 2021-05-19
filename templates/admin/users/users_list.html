@@ -1,0 +1,141 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Сотрудники{% endblock %}
+{% block prestyles %}
+    <link rel="stylesheet" href="{% static 'assets/css/dataTables.bootstrap4.min.css' %}">
+{% endblock prestyles %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/select2-bootstrap.min.css' %}">
+{% endblock %}
+{% block breadcrumbs %}
+    <span class="breadcrumb-item active">Сотрудники</span>
+{% endblock %}
+{% block content %}
+    <div class="d-none" id="departmentsList">
+        {% for department in departments %}
+            <option value="{{ department.id }}" data-company-id="{{ department.company_id }}">{{ department.name }}</option>
+        {% endfor %}
+    </div>
+    <h2 class="content-heading">Сотрудники</h2>
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">Список сотрудников</h3>
+            <div class="block-options">
+                <a href="{% url 'admin_new_user' %}" class="btn-block-option">
+                    <i class="si si-plus mr-10"></i>Добавить
+                </a>
+            </div>
+        </div>
+        <div class="block-content block-content-full">
+            {% if users %}
+                <section class="users-filters py-10">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3">
+                            <div class="form-group">
+                                <div class="form-material" id="companiesInputGroup">
+                                    <select name="companiesSelect" id="companiesSelect" class="js-select2 form-control" data-placeholder="Выберите компанию">
+                                        <option></option>
+                                        {% for company in companies %}
+                                            <option value="{{ company.id }}">{{ company.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="companiesSelect">Компания</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <div class="form-group">
+                                <div class="form-material" id="departmentsInputGroup">
+                                    <select name="departmentsSelect" id="departmentsSelect" class="js-select2 form-control" disabled data-placeholder="Выберите отдел">
+                                        <option></option>
+                                    </select>
+                                    <label for="departmentsSelect">Отдел</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <div class="row align-items-center h-100 justify-content-center">
+                                <label class="css-control css-control-primary css-checkbox">
+                                    <input type="checkbox" name="is_manager" id="IsManager" class="css-control-input">
+                                    <span class="css-control-indicator"></span> Менеджер
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                           <div class="d-flex align-items-center justify-content-center h-100">
+                                <button id="resetFilter" type="button" class="btn btn-alt-primary"><i class="fa fa-fw fa-undo"></i> Сбросить</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-vcenter js-dataTable-simple" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">№</th>
+                                <th class="text-center">Имя</th>
+                                <th class="text-center">Номер телефона</th>
+                                <th class="text-center">Компания</th>
+                                <th class="text-center">Отдел</th>
+                                <th class="text-center">Подтверждён</th>
+                                <th class="text-center">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                                <tr class="user-table-row" {% if not user.is_manager %}data-company-id="{{ user.department.company_id }}" data-department-id="{{ user.department_id }}" {% else %}data-is-manager="true"{% endif %}>
+                                    <td class="text-center">{{ forloop.counter }}</td>
+                                    <td class="font-w600">{{ user.name }}</td>
+                                    <td>{{ user.phone_number }}</td>
+                                    <td class="text-center">
+                                        {% if user.department %}
+                                            <span class="badge badge-secondary">{{ user.department.company.name }}</span>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if user.department %}
+                                            {{ user.department.name }}
+                                        {% else %}
+                                            <span class="badge badge-info">Менеджер</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if user.confirmed %}
+                                            <i class="fa fa-check text-success"></i>
+                                        {% else %}
+                                            <i class="fa fa-close text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'admin_edit_user' pk=user.id %}" class="btn btn-sm btn-alt-info" data-toggle="tooltip" title="Просмотр">
+                                            <i class="fa fa-user"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="py-30 text-center">
+                    <i class="si si-ghost text-primary display-3"></i>
+                    <p class="mt-20 font-size-h5">Ещё нет ни одного сотрудника</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'assets/js/plugins/select2.full.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/js/users.js' %}"></script>
+    <script>
+        $(function() {
+            Codebase.helper('select2');
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+    Изменить комментарий
+{% endblock title %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin_ratings' %}" class="breadcrumb-item">Рейтинги</a>
+    <span class="breadcrumb-item active">Редактировать</span>
+{% endblock breadcrumbs %}
+{% block content %}
+    <div class="block">
+        <div class="block-header default">
+            <h3 class="block-title">Редактировать оценку</h3>
+        </div>
+        <div class="block-content">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="font-size-md font-weight-bold">От кого:</span>
+                <span class="font-size-md">
+                    {% if rating.from_user %}{{rating.from_user.name}}{% else %}Unknown{% endif %}
+                </span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-20">
+                <span class="font-size-md font-weight-bold">Кому:</span>
+                <span class="font-size-md">
+                    {% if rating.to_user %}{{rating.to_user.name}}{% else %}Unknown{% endif %}
+                </span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-20">
+                <span class="font-size-md font-weight-bold">Оценка:</span>
+                <span class="text-primary font-size-md">
+                    {% if rating.value == 1 %}
+                        <i class="fa fa-star"></i>
+                    {% elif rating.value == 2 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    {% elif rating.value == 3 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    {% elif rating.value == 4 %}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    {% elif rating.value == 5%}
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="row mt-10">
+                <div class="col-12">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-material floating form-material-primary">
+                            <textarea name="comment" id="comment" rows="1" class="form-control">{{ rating.comment }}</textarea>
+                            <label for="{{form.comment.id_for_label}}">Комментарий</label>
+                        </div>
+                        <div class="form-group mt-20 row">
+                            <div class="col-md-9">
+                                <button type="submit" class="btn btn-alt-primary">Сохранить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

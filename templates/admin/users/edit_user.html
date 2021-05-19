@@ -1,0 +1,124 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}
+    {{ form.name.value }}
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/select2-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/sweetalert2.min.css' %}">
+{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin_users' %}" class="breadcrumb-item">Сотрудники</a>
+    <span class="breadcrumb-item active">{{ form.name.value }}</span>
+{% endblock %}
+{% block content %}
+    <form action="{% url 'admin_delete_user' pk=user_id %}" id="userDeleteForm" method="post">
+        {% csrf_token %}
+    </form>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">{{ form.name.value }} <small>Редактировать</small></h3>
+                <div class="block-options">
+                    <button type="submit" class="btn btn-alt-primary btn-sm"><i class="fa fa-check"></i>Сохранить</button>
+                    <a href="#" class="btn btn-alt-danger btn-sm" id="userDeleteButton" data-user-name="{{ form.name.value }}"><i class="fa fa-trash-o mr-5"></i>Удалить</a>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group {% if form.name.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary floating">
+                                <input type="text" name="name" id="name" value="{{ form.name.initial }}" class="form-control js-maxlength" maxlength="100" data-always-show="true" data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-primary">
+                                <label for="{{ form.name.id_for_label }}">Имя</label>
+                            </div>
+                            {% for error in form.name.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group {% if form.phone_number.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary floating">
+                                <input type="text" name="phone_number" id="phone_number" value="{{ form.phone_number.value }}" class="form-control js-masked-phone">
+                                <label for="{{ form.phone_number.id_for_label }}">Номер телефона</label>
+                            </div>
+                            {% for error in form.phone_number.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <input type="hidden" name="company" id="company" value="{{ form.company.value}}">
+                        <div class="form-group {% if form.company.errors %}is-invalid{% endif %}">
+                            <div class="form-material input-group" id="companiesInputGroup">
+                                <select name="companiesSelect" id="companiesSelect" {% if form.is_manager.value %}disabled{% endif %} class="js-select2 form-control" data-placeholder="Выберите компанию">
+                                    <option></option>
+                                    {% for company in companies %}
+                                        <option value="{{ company.id }}" {% if form.company.value == company.id %}selected{% endif %}>{{ company.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="companiesSelect">Компания</label>
+                                <a href="#" class="ml-20 btn btn-sm btn-alt-primary {% if form.is_manager.value %}disabled{% endif %}" id="addCompanyBtn">
+                                    <i class="fa fa-fw fa-plus"></i>
+                                </a>
+                            </div>
+                            {% for error in form.company.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <input type="hidden" name="department" id="department" value="{{ form.department.value }}">
+                        <div class="form-group {% if form.department.errors %}is-invalid{% endif %}">
+                            <div class="form-material input-group" id="departmentsInputGroup">
+                                <select name="departmentsSelect" id="departmentsSelect" class="js-select2 form-control" {% if form.is_manager.value %}disabled{% endif %} data-placeholder="Выберите отдел">
+                                    <option></option>
+                                    {% if current_departments %}
+                                        {% for department in current_departments %}
+                                            <option value="{{ department.id }}" {% if department.id == form.department.value %}selected{% endif %}>{{ department.name }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                                <label for="departmentsSelect">Отдел</label>
+                                <a href="#" class="ml-20 btn btn-sm btn-alt-primary {% if form.is_manager.value %}disabled{% endif %}" id="addDepartmentBtn">
+                                    <i class="fa fa-fw fa-plus"></i>
+                                </a>
+                            </div>
+                            {% for error in form.department.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-20 justify-content-center">
+                    <label class="css-control css-control-primary css-checkbox">
+                        <input type="checkbox" name="is_manager" id="is_manager" class="css-control-input" {% if form.is_manager.value %}checked{% endif %}>
+                        <span class="css-control-indicator"></span> Менеджер
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="d-none" id="departmentsList">
+        {% for department in departments %}
+            <option value="{{ department.id }}" data-company-id="{{ department.company_id }}">{{ department.name }}</option>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'assets/js/plugins/select2.full.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/bootstrap-maxlength.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/es6-promise.auto.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'assets/js/user.js' %}"></script>
+    <script>
+        jQuery(function() {
+            Codebase.helpers(['select2', 'maxlength'])
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+Сигналы SOS
+{% endblock title %}
+{% block breadcrumbs %}
+    <span class="breadcrumb-item active">Сигналы SOS</span>
+{% endblock breadcrumbs %}
+{% block content %}
+    <h3 class="content-heading">Сигналы SOS</h3>
+    {% if signals %}
+        <div class="row">
+            {% for signal in signals %}
+                <div class="col-sm-12 col-md-4">
+                    <a class="block block-link-shadow text-center" target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ signal.location_lat }},{{ signal.location_lon }}">
+                        <div class="block-content block-content-full">
+                            <p class="mt-5">
+                                <i class="fa fa-warning text-danger fa-4x"></i>
+                            </p>
+                            <p class="font-weight600">{{ signal.user.name }}</p>
+                            <p class="font-weight600"><span class="link-effect">{{ signal.user.phone_number }}</span></p>
+                            <p class="font-weight600">{{ signal.created_at }}</p>
+                            <p class="font-weight600">Кому адресовано: {{ signal.department_name }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="py-30 text-center">
+            <i class="si si-ghost text-primary display-3"></i>
+            <p class="mt-20 font-size-h5">Ещё ни одного сигнала SOS не поступило</p>
+        </div>
+    {% endif %}
+{% endblock content %}

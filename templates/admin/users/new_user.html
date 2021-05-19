@@ -1,0 +1,108 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}
+    Новый сотрудник
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/select2-bootstrap.min.css' %}">
+{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin_users' %}" class="breadcrumb-item">Сотрудники</a>
+    <span class="breadcrumb-item active">Новый сотрудник</span>
+{% endblock %}
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="block">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Добавить сотрудника</h3>
+                <div class="block-options">
+                    <button type="submit" class="btn btn-alt-primary btn-sm"><i class="fa fa-check"></i>Сохранить</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group {% if form.name.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary floating">
+                                <input type="text" name="name" id="name" class="form-control js-maxlength" maxlength="100" data-always-show="true" data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-primary">
+                                <label for="{{ form.name.id_for_label }}">Имя</label>
+                            </div>
+                            {% for error in form.name.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group {% if form.phone_number.errors %}is-invalid{% endif %}">
+                            <div class="form-material form-material-primary floating">
+                                <input type="text" name="phone_number" id="phone_number" class="form-control js-masked-phone">
+                                <label for="{{ form.phone_number.id_for_label }}">Номер телефона</label>
+                            </div>
+                            {% for error in form.phone_number.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <input type="hidden" name="company" id="company">
+                        <div class="form-group">
+                            <div class="form-material input-group" id="companiesInputGroup">
+                                <select name="companiesSelect" id="companiesSelect" class="js-select2 form-control" data-placeholder="Выберите компанию">
+                                    <option></option>
+                                    {% for company in companies %}
+                                        <option value="{{ company.id }}">{{ company.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="companiesSelect">Компания</label>
+                                <a href="#" class="ml-20 btn btn-sm btn-alt-primary" id="addCompanyBtn">
+                                    <i class="fa fa-fw fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <input type="hidden" name="department" id="department">
+                        <div class="form-group">
+                            <div class="form-material input-group" id="departmentsInputGroup">
+                                <select name="departmentsSelect" id="departmentsSelect" class="js-select2 form-control" disabled data-placeholder="Выберите отдел">
+                                    <option></option>
+                                </select>
+                                <label for="departmentsSelect">Отдел</label>
+                                <a href="#" class="ml-20 btn btn-sm btn-alt-primary disabled" id="addDepartmentBtn">
+                                    <i class="fa fa-fw fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-20 justify-content-center">
+                    <label class="css-control css-control-primary css-checkbox">
+                        <input type="checkbox" name="is_manager" id="is_manager" class="css-control-input">
+                        <span class="css-control-indicator"></span> Менеджер
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="d-none" id="departmentsList">
+        {% for department in departments %}
+            <option value="{{ department.id }}" data-company-id="{{ department.company_id }}">{{ department.name }}</option>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/1.5.0/cleave.min.js" integrity="sha256-X5i5OjhCpz9EP/izWPCm4eSdyEJFZ5Q7yWd/1fBs1Z4=" crossorigin="anonymous"></script>
+    <script src="https://nosir.github.io/cleave.js/dist/cleave-phone.i18n.js"></script>
+    <script src="{% static 'assets/js/plugins/select2.full.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/bootstrap-maxlength.min.js' %}"></script>
+    <script src="{% static 'assets/js/user.js' %}"></script>
+    <script>
+        jQuery(function() {
+            Codebase.helpers(['select2', 'maxlength'])
+        })
+    </script>
+{% endblock %}

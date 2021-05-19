@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load static %}
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static "assets/css/codebase.min.css" %}">
+</head>
+<body>
+    <div class="d-none" id="ratings">
+        {% for rating in ratings %}
+            <div data-user-name="{{ rating.user.name }}" data-avg-value="{{ rating.avg_value }}" data-count="{{ rating.count }}"></div>
+        {% endfor %}
+    </div>
+
+    <div id="page-container" class="page-header-modern main-content-boxed">
+        <main id="main-container">
+            <div class="content">
+                <div class="block">
+                    <div class="block-header block-header-default">
+                        <h3 class="block-title">{{ company.name }}</h3>
+                    </div>
+                    <div class="block-content block-content-full text-center">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="block">
+                                    <div class="block-content block-content-full">
+                                        <div class="font-size-h2 font-w700 text-success">{{ users_count }}</div>
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">Всего сотрудников</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="block">
+                                    <div class="block-content block-content-full">
+                                        <div class="font-size-h2 font-w700 text-success">{{ confirmed_users_count }}</div>
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">Авторизовано</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="block">
+                                    <div class="block-content block-content-full">
+                                        <div class="font-size-h2 font-w700 text-success">{{ not_confirmed_users_count }}</div>
+                                        <div class="font-size-sm font-w600 text-uppercase text-muted">Неавторизовано</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <canvas class="js-chartjs-bars"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="{% static "assets/js/core/jquery.min.js" %}"></script>
+    <script src="{% static 'assets/js/plugins/Chart.bundle.min.js' %}"></script>
+    <script>
+        // Set Global Chart.js configuration
+        Chart.defaults.global.defaultFontColor              = '#555555';
+        Chart.defaults.scale.gridLines.color                = "rgba(0,0,0,.04)";
+        Chart.defaults.scale.gridLines.zeroLineColor        = "rgba(0,0,0,.1)";
+        Chart.defaults.scale.ticks.beginAtZero              = true;
+        Chart.defaults.global.elements.line.borderWidth     = 2;
+        Chart.defaults.global.elements.point.radius         = 5;
+        Chart.defaults.global.elements.point.hoverRadius    = 7;
+        Chart.defaults.global.tooltips.cornerRadius         = 3;
+        Chart.defaults.global.legend.labels.boxWidth        = 12;
+
+        let ratingsContainer = jQuery('.js-chartjs-bars');
+        let chartBars;
+        let ratingsData = jQuery('#ratings').children();
+        let names = [];
+        let avg_values = [];
+        for (let i = 0; i < ratingsData.length; i++) {
+            let element = $(ratingsData[i]);
+            let count = element.attr('data-count');
+            let userName = element.attr('data-user-name');
+            let name = `${userName} (${count})`;
+            names.push(name);
+            avg_values.push(parseFloat(element.attr('data-avg-value')));
+        }
+        let ratingChartData = {
+            labels: names,
+            datasets: [
+                {
+                    label: 'Среднее значение',
+                    fill: true,
+                    backgroundColor: 'rgba(66,165,245,.75)',
+                    borderColor: 'rgba(66,165,245,1)',
+                    pointBackgroundColor: 'rgba(66,165,245,1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(66,165,245,1)',
+                    data: avg_values
+                }
+            ]
+        }
+        // Init Chart
+        if (ratingsContainer.length) {
+            chartBars = new Chart(ratingsContainer, { type: 'horizontalBar', data: ratingChartData });
+        }
+    </script>
+</body>
+</html>

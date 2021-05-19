@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Meta tags -->
+    <meta name="description" content="Административная панель Telegram бота проекта RevoRate">
+    <meta name="author" content="Verve Intelligence Development">
+    <meta name="robots" content="noindex, nofollow">
+    {% load static %}
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{% static "assets/css/codebase.min.css" %}">
+
+    <!-- Page title -->
+    <title>404 - Не найдено | RevoRate</title>
+</head>
+<body>
+    <div id="page-container" class="main-content-boxed">
+        <!-- Main Container -->
+        <main id="main-container">
+            <!-- Page Content -->
+            <div class="hero bg-white">
+                <div class="hero-inner">
+                    <div class="content content-full">
+                        <div class="py-30 text-center">
+                            <div class="display-3 text-danger">
+                                <i class="fa fa-warning"></i> 404
+                            </div>
+                            <h1 class="h2 font-w700 mt-30 mb-10">Упс, похоже, вы наткнулись на ошибку...</h1>
+                            <h2 class="h3 font-w400 text-muted mb-50">Нам очень жаль, но искомый ресурс отсутствует :(</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END Page Content -->
+        </main>
+        <!-- END Main Container -->
+    </div>
+    <!-- END Page Container -->
+    <script src="{% static "assets/js/codebase.js" %}"></script>
+</body>
+</html>

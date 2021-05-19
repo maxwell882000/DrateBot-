@@ -1,0 +1,53 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}{{ company.name }}{% endblock %}
+{% block breadcrumbs %}
+    <a href="{% url 'admin_companies_list' %}" class="breadcrumb-item">Список компаний</a>
+    <span class="breadcrumb-item active">{{ company.name }}</span>
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'assets/css/sweetalert2.min.css' %}">
+{% endblock %}
+{% block content %}
+    <form action="{% url 'admin_delete_company' pk=company.id %}" method="post" id="companyDeleteForm" class="d-none">
+        {% csrf_token %}
+    </form>
+    <div class="block">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">{{ company.name }}</h3>
+            <div class="bock-options">
+                <button type="button" class="btn-block-option dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Настройки
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                    <a href="{% url 'admin_new_department' company_id=company.id %}" class="dropdown-item"><i class="fa fa-plus mr-5"></i>Добавить отдел</a>
+                    <span class="dropdown-divider"></span>
+                    <a href="{% url 'admin_edit_company' pk=company.id %}" class="dropdown-item"><i class="fa fa-fw fa-pencil mr-5"></i>Редактировать</a>
+                    <a href="#" class="dropdown-item" id="companyDeleteButton" data-company-name="{{ company.name }}"><i class="fa fa-trash-o mr-5"></i>Удалить</a>
+                </div>
+            </div>
+        </div>
+        <div class="block-content">
+            {% if department_list %}
+                <ul class="list-group list-group-flush">
+                    {% for department in department_list %}
+                        <a href="{% url 'admin_edit_department' company_id=company.id pk=department.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            {{ department.name }}
+                            <span class="badge badge-primary badge-pill">{{ department.users_count }}</span>
+                        </a>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="py-30 text-center">
+                    <i class="si si-ghost text-primary display-3"></i>
+                    <p class="mt-20 font-size-h5">В компании {{ company.name }} не добавлено ещё ни одного отдела</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'assets/js/plugins/es6-promise.auto.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'assets/js/company.js' %}"></script>
+{% endblock %}
